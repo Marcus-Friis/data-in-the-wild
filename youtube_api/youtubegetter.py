@@ -1,4 +1,7 @@
+# youtubegetter.py
+# By Andreas Belsager, Mads Høgenhaug, Marcus Friis & Mia Pugholm
 import googleapiclient.discovery
+import googleapiclient
 
 
 class YoutubeGetter:
@@ -25,9 +28,12 @@ class YoutubeGetter:
                     out = func(*args, **kwargs)
                     return out
                 except:
-                    self.key = next(self.key_gen)
-                    self.youtube = self.setup_youtube_api(self.key)
-                    print(f'getting new key:\t\t{self.key}')
+                    try:
+                        self.key = next(self.key_gen)
+                        self.youtube = self.setup_youtube_api(self.key)
+                        print(f'getting new key:\t\t{self.key}')
+                    except StopIteration:
+                        raise LookupError('No more keys :(')
         return wrapper
 
     def add_response_to_dataframe(self, response):

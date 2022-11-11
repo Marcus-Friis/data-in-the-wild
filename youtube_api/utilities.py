@@ -1,3 +1,5 @@
+# utilities.py
+# By Andreas Belsager, Mads Høgenhaug, Marcus Friis & Mia Pugholm
 import configparser
 from time import sleep
 import googleapiclient.discovery
@@ -12,16 +14,6 @@ def setup_youtube_api(DEVELOPER_KEY):
     youtube = googleapiclient.discovery.build(
         api_service_name, api_version, developerKey=DEVELOPER_KEY)
     return youtube
-
-
-def max_requests_handling(func):
-    def wrapper(*args, **kwargs):
-        try:
-            out = func(*args, **kwargs)
-        except:
-            raise ZeroDivisionError('Hello wfuadnsad')
-        return out
-    return wrapper
 
 
 def timeout(func):

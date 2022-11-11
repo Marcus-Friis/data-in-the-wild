@@ -1,3 +1,5 @@
+# main.py
+# By Andreas Belsager, Mads Høgenhaug, Marcus Friis & Mia Pugholm
 import requests
 import re
 
@@ -19,4 +21,4 @@ if __name__ == '__main__':
     key_gen = get_youtube_api_key('config.ini')
     ydg = YoutubeVideoGetter(key_gen)
     ydg.get_all_videos('UC1haxYclmhXwa4FKFqYSaRw', q='')
-    print(ydg.df)
+    print(ydg.df.to_csv())

@@ -1,3 +1,5 @@
+# youtubecommentgetter.py
+# By Andreas Belsager, Mads Høgenhaug, Marcus Friis & Mia Pugholm
 from youtube_api.youtubegetter import YoutubeGetter
 from youtube_api.utilities import timeout
 
@@ -6,7 +8,7 @@ class YoutubeCommentGetter(YoutubeGetter):
     def __init__(self, youtube):
         super().__init__(youtube)
         self._responses = []
-        self.cols = ['videoId', 'textOriginal', 'publishedAt']
+        self.cols = ['channelId', 'videoId', 'textOriginal', 'likeCount', 'publishedAt']
         self.df = self.init_dataframe()
 
     def get_comments(self, video_id):
@@ -34,7 +36,7 @@ class YoutubeCommentGetter(YoutubeGetter):
                 token = response['nextPageToken']
             except KeyError:
                 token = False
-    @timeout
+
     def get_comments_page(self, params):
         request = self.youtube.search().list(params)
         response = request.execute()
@@ -44,6 +46,9 @@ class YoutubeCommentGetter(YoutubeGetter):
     def add_response_to_dataframe(self, response):
         page_row = {col: [] for col in self.cols}
         for item in response['items']:
+            page_row['channelId'].append(item['snippet']['channelId'])
+            page_row['videoId'].append(item['snippet']['videoId'])
             page_row['textOriginal'].append(item['snippet']['textOriginal'])
+            page_row['likeCount'].append(item['snippet']['likeCount'])
             page_row['publishedAt'].append(item['snippet']['publishedAt'])
             pass

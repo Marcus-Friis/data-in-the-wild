@@ -1,3 +1,5 @@
+# youtubevideogetter.py
+# By Andreas Belsager, Mads Høgenhaug, Marcus Friis & Mia Pugholm
 import pandas as pd
 
 from youtube_api.youtubegetter import YoutubeGetter
