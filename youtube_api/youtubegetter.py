@@ -2,6 +2,7 @@
 # By Andreas Belsager, Mads Høgenhaug, Marcus Friis & Mia Pugholm
 import googleapiclient.discovery
 import googleapiclient
+import pandas as pd
 
 
 class YoutubeGetter:
@@ -9,6 +10,8 @@ class YoutubeGetter:
         self.key_gen = key_gen
         self.key = next(self.key_gen)
         self.youtube = self.setup_youtube_api(self.key)
+        self.cols = []
+        self.df = self.init_dataframe()
 
     @staticmethod
     def setup_youtube_api(DEVELOPER_KEY):
@@ -40,6 +43,8 @@ class YoutubeGetter:
         pass
 
     def init_dataframe(self):
-        pass
+        df = pd.DataFrame(columns=self.cols)
+        return df
 
-
+    def reset_dataframe(self):
+        self.df = self.init_dataframe()

@@ -20,5 +20,5 @@ def get_scores(id):
 if __name__ == '__main__':
     key_gen = get_youtube_api_key('config.ini')
     ydg = YoutubeVideoGetter(key_gen)
-    ydg.get_all_videos('UC1haxYclmhXwa4FKFqYSaRw', q='')
+    ydg.get_all_videos('UC9InaN7Xbh39_tUSCfi-7lQ', q='')
     print(ydg.df.to_csv())
