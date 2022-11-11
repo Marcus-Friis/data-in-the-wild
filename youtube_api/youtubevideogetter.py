@@ -1,7 +1,7 @@
 import pandas as pd
 
 from youtube_api.youtubegetter import YoutubeGetter
-from youtube_api.utilities import max_requests_handling, timeout
+from youtube_api.utilities import timeout
 
 
 class YoutubeVideoGetter(YoutubeGetter):
@@ -25,7 +25,7 @@ class YoutubeVideoGetter(YoutubeGetter):
         try:
             token = response['nextPageToken']
         except KeyError:
-            return
+            token = False
 
         while token:
             params['pageToken'] = token
@@ -38,13 +38,16 @@ class YoutubeVideoGetter(YoutubeGetter):
             except KeyError:
                 token = False
 
-    @timeout
     def get_video_page(self, params):
-        request = self.youtube.search().list(**params)
+        @timeout
+        @self.max_requests_handling
+        def wrapper():
+            request = self.youtube.search().list(**params)
 
-        # Query execution
-        response = request.execute()
-        return response
+            # Query execution
+            response = request.execute()
+            return response
+        return wrapper()
 
     def add_response_to_dataframe(self, response):
         page_row = {col: [] for col in self.cols}

@@ -39,6 +39,3 @@ def get_youtube_api_key(filename):
     for key_string in list(section):
         key = section[key_string]
         yield key
-
-
-

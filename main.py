@@ -16,9 +16,7 @@ def get_scores(id):
 
 
 if __name__ == '__main__':
-    for key in get_youtube_api_key('config.ini'):
-        break
-    youtube = setup_youtube_api(key)
-    ydg = YoutubeVideoGetter(youtube)
+    key_gen = get_youtube_api_key('config.ini')
+    ydg = YoutubeVideoGetter(key_gen)
     ydg.get_all_videos('UC1haxYclmhXwa4FKFqYSaRw', q='')
     print(ydg.df)
