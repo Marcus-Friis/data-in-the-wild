@@ -9,10 +9,10 @@ class YoutubeCommentGetter(YoutubeGetter):
     def __init__(self, key_gen):
         super().__init__(key_gen)
         self._responses = []
-        self.cols = ['channelId', 'videoId', 'commentId', 'textOriginal', 'likeCount', 'publishedAt']
+        self.cols = ['videoId', 'commentId', 'textOriginal', 'likeCount', 'publishedAt']
         self.df = self.init_dataframe()
 
-    def get_comments(self, video_id):
+    def get_comments(self, video_id, max_requests=1000):
         params = {
             'part': 'id,snippet',
             'videoId': video_id
@@ -27,7 +27,8 @@ class YoutubeCommentGetter(YoutubeGetter):
         except KeyError:
             token = False
 
-        while token:
+        token_iteration = 1
+        while token and token_iteration < max_requests:
             params['pageToken'] = token
             response = self.get_comments_page(params)
             self.add_response_to_dataframe(response)
@@ -37,12 +38,13 @@ class YoutubeCommentGetter(YoutubeGetter):
                 token = response['nextPageToken']
             except KeyError:
                 token = False
+            token_iteration += 1
 
     def get_comments_page(self, params):
         @timeout
         @self.max_requests_handling
         def wrapper():
-            request = self.youtube.search().list(params)
+            request = self.youtube.commentThreads().list(**params)
             response = request.execute()
 
             return response
@@ -51,12 +53,11 @@ class YoutubeCommentGetter(YoutubeGetter):
     def add_response_to_dataframe(self, response):
         page_row = {col: [] for col in self.cols}
         for item in response['items']:
-            page_row['channelId'].append(item['snippet']['channelId'])
             page_row['videoId'].append(item['snippet']['videoId'])
-            page_row['commentId'].append(item['id']['commentId'])
-            page_row['textOriginal'].append(item['snippet']['textOriginal'])
-            page_row['likeCount'].append(item['snippet']['likeCount'])
-            page_row['publishedAt'].append(item['snippet']['publishedAt'])
+            page_row['commentId'].append(item['id'])
+            page_row['textOriginal'].append(item['snippet']['topLevelComment']['snippet']['textOriginal'])
+            page_row['likeCount'].append(item['snippet']['topLevelComment']['snippet']['likeCount'])
+            page_row['publishedAt'].append(item['snippet']['topLevelComment']['snippet']['publishedAt'])
         df_page = pd.DataFrame(page_row)
 
         self.df = pd.concat((self.df, df_page), ignore_index=True)
