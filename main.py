@@ -37,16 +37,16 @@ if __name__ == '__main__':
         ydg.get_all_videos(val, q='Trailer')
         ydg.df.to_csv(f'{key}.csv')
 
-    df_hbo = pd.read_csv('Hbo.csv')
-    df_amazon = pd.read_csv('amazon.csv')
-    df_disney = pd.read_csv('disney.csv')
-    df_netflix = pd.read_csv('netflix.csv')
+    df_hbo = pd.read_csv('data/hbo.csv')
+    df_amazon = pd.read_csv('data/amazon.csv')
+    df_disney = pd.read_csv('data/disney.csv')
+    df_netflix = pd.read_csv('data/netflix.csv')
 
     df_all = pd.concat((df_hbo, df_netflix, df_disney, df_amazon))
     ycg = YoutubeCommentGetter(key_gen)
 
     for i, video_id in enumerate(df_all.videoId):
         print(i, video_id)
-        ycg.get_comments(video_id, max_requests=10)
+        ycg.get_comments(video_id)
 
     ycg.df.to_csv('comments.csv')
