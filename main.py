@@ -43,10 +43,23 @@ if __name__ == '__main__':
     df_netflix = pd.read_csv('data/netflix.csv')
 
     df_all = pd.concat((df_hbo, df_netflix, df_disney, df_amazon))
+    df_dict = {
+        'hbo': df_hbo,
+        'amazon': df_amazon,
+        'disney': df_disney,
+        'netflix': df_netflix
+    }
+
+    key_gen = get_youtube_api_key('config.ini')
     ycg = YoutubeCommentGetter(key_gen)
 
-    for i, video_id in enumerate(df_all.videoId):
-        print(i, video_id)
-        ycg.get_comments(video_id)
+    for name, df in df_dict.items():
+        print(name)
+        for i, video_id in enumerate(df_all.videoId):
+            print(i, video_id)
+            ycg.get_comments(video_id, max_requests=10)
 
-    ycg.df.to_csv('comments.csv')
+        ycg.df.to_csv(f'{name}_comments.csv')
+        ycg.reset_dataframe()
+
+    # TODO: make deepcopy of key_gen in class YG
