@@ -30,7 +30,7 @@ class YoutubeGetter:
                 try:
                     out = func(*args, **kwargs)
                     return out
-                except:
+                except googleapiclient.errors.HttpError:
                     try:
                         self.key = next(self.key_gen)
                         self.youtube = self.setup_youtube_api(self.key)
