@@ -23,20 +23,22 @@ class YoutubeCommentGetter(YoutubeGetter):
         token_iterator = 0
         while True:
             response = self.get_comments_page(params)
-            if response:
-                self._responses.append(response)
-                self.add_response_to_dataframe(response)
+            if response is None:
+                break
 
-                try:
-                    token = response['nextPageToken']
-                    params['pageToken'] = token
-                except KeyError:
-                    token = False
+            self._responses.append(response)
+            self.add_response_to_dataframe(response)
 
-                if not (token and token_iterator < max_requests):
-                    break
+            try:
+                token = response['nextPageToken']
+                params['pageToken'] = token
+            except KeyError:
+                token = False
 
-                token_iterator += 1
+            if not (token and token_iterator < max_requests):
+                break
+
+            token_iterator += 1
 
     def get_comments_page(self, params):
         @timeout
@@ -71,5 +73,5 @@ class YoutubeCommentGetter(YoutubeGetter):
                 if 'has disabled comments' in str(e):
                     print('disabled comments')
                 else:
-                    raise googleapiclient.errors.HttpError(e)
+                    raise e
         return wrapper
