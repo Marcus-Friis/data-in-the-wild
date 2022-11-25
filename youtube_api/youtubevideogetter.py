@@ -13,35 +13,33 @@ class YoutubeVideoGetter(YoutubeGetter):
         self.cols = ['channelId', 'videoId', 'videoTitle', 'publishTime', 'publishedAt']
         self.df = self.init_dataframe()
 
-    def get_all_videos(self, channel_id, q='trailer'):
+    def get_videos(self, channel_id, q='trailer', max_requests=100):
         params = {
             'part': 'id,snippet',
             'type': 'video',
             'channelId': channel_id,
             'q': q
         }
-        response = self.get_video_page(params)
-        self._responses.append(response)
-        self.add_response_to_dataframe(response)
 
-        try:
-            token = response['nextPageToken']
-        except KeyError:
-            token = False
-
-        while token:
-            params['pageToken'] = token
+        token_iterator = 0
+        while True:
             response = self.get_video_page(params)
-            self.add_response_to_dataframe(response)
             self._responses.append(response)
+            self.add_response_to_dataframe(response)
 
             try:
                 token = response['nextPageToken']
+                params['pageToken'] = token
             except KeyError:
                 token = False
 
+            if not (token and token_iterator < max_requests):
+                break
+
+            token_iterator += 1
+
     def get_video_page(self, params):
-        @timeout
+        # @timeout
         @self.max_requests_handling
         def wrapper():
             request = self.youtube.search().list(**params)
