@@ -30,13 +30,13 @@ class YoutubeGetter:
                 try:
                     out = func(*args, **kwargs)
                     return out
-                except googleapiclient.errors.HttpError:
+                except googleapiclient.errors.HttpError as e:
                     try:
                         self.key = next(self.key_gen)
                         self.youtube = self.setup_youtube_api(self.key)
                         print(f'getting new key:\t\t{self.key}')
                     except StopIteration:
-                        raise LookupError('No more keys :(')
+                        raise e
         return wrapper
 
     def add_response_to_dataframe(self, response):
