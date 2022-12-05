@@ -23,5 +23,5 @@ def sentiment_vader(sentence):
   
     return negative, neutral, positive, compound, overall_sentiment
 
-
-print(sentiment_vader("idk, i found BCS not too interesting "))
+if __name__ == '__main__':
+    print(sentiment_vader("idk, i found BCS not too interesting "))
