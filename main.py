@@ -34,7 +34,7 @@ if __name__ == '__main__':
     for key, val in channel_ids.items():
         print(key)
         ydg.reset_dataframe()
-        ydg.get_all_videos(val, q='Trailer')
+        ydg.get_videos(val, q='Trailer')
         ydg.df.to_csv(f'{key}.csv')
 
     df_hbo = pd.read_csv('data/hbo.csv')
@@ -42,11 +42,10 @@ if __name__ == '__main__':
     df_disney = pd.read_csv('data/disney.csv')
     df_netflix = pd.read_csv('data/netflix.csv')
 
-    df_all = pd.concat((df_hbo, df_netflix, df_disney, df_amazon))
     df_dict = {
-        'hbo': df_hbo,
-        'amazon': df_amazon,
-        'disney': df_disney,
+        # 'hbo': df_hbo,
+        # 'amazon': df_amazon,
+        # 'disney': df_disney,
         'netflix': df_netflix
     }
 
@@ -55,11 +54,9 @@ if __name__ == '__main__':
 
     for name, df in df_dict.items():
         print(name)
-        for i, video_id in enumerate(df_all.videoId):
+        for i, video_id in enumerate(df.videoId):
             print(i, video_id)
-            ycg.get_comments(video_id, max_requests=10)
+            ycg.get_comments(video_id, max_requests=float('inf'))
 
-        ycg.df.to_csv(f'{name}_comments.csv')
+        ycg.df.to_csv(f'comments/{name}_comments.csv')
         ycg.reset_dataframe()
-
-    # TODO: make deepcopy of key_gen in class YG
