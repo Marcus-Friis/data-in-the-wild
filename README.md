@@ -1,45 +1,176 @@
 # data-in-the-wild
 
+<img src="reports/figs/sentiment_rating_scatter.svg" width="48">
+
+
 ### Team Members: 
 Andreas Belsager (abel@itu.dk), Mads Høgenhaug (mkrh@itu.dk), Marcus Friis (mahf@itu.dk) & Mia Pugholm (mipu@itu.dk)
 
 # Overview
 This project is split up into 3 main parts:
-1. Data collection
-2. Data wrangling and processing
-3. Data analysis
+1. [Data collection](#data-collection)
+2. [Data annotation](#data-annotation)
+3. [Data wrangling and processing](#data-wrangling-and-processing)
+4. [Data analysis](#data-analysis)
 
 This readme documents which files are responsible for what parts, and how to replicate our results. For a full project 
 overview, see [Project Overview](#project-overview)
 
 
 ## Data collection
-If you don't want to collect data yourself, see the [data folder](data)
-Data collection can be broken up into 2 parts:
+If you don't want to collect data yourself, see the *[data folder](data)*
+Data collection can be broken up into 2 separate processes:
 
-### Scrape YouTube data
+1. [Get YouTube data](#get-youtube-data)
+2. [Get ReturnYouTubeDislikes data](#get-return-youtube-dislike-data)
+ 
+and   
+
+1. [Download IMDb data](#download-imdb-data)
+2. [Scrape IMDb release dates](#scrape-imdb-release-dates)
+
+
+
+### Get YouTube data
 There are 2 different kinds of data that needs to be scraped from YouTube: trailer video data and comments.
-These can both be collected with the [*youtube_api*](/tree/main/src/youtube_api) module. To start off, you first need one or more YouTube 
-API key, which should be stored in the [*config.ini*](/blob/main/src/config.ini) file as such:
+These can both be collected with the [*youtube_api*](src/youtube_api) module. To start off, you first need one or more YouTube 
+API key, which should be stored in the [*config.ini*](src/config.ini) file as such:
+
+
+>[DEFAULT]
+> 
+>key1=YOUR_API_KEY
+> 
+>key2=YOUR_API_KEY_2
+> 
+>keyn=YOUR_API_KEY_n
+
+
+It is recommended to have multiple keys, since [YouTube's search method](LINK) quickly use up the _____ credits?? \reference
+Once *[config.ini](src/config.ini)* has keys, you can collect trailers and comments with *[main.py](src/main.py)* as such
 
 ```
-[DEFAULT]
-key1=YOUR_API_KEY
-key2=YOUR_API_KEY_2
-        .
-        .
-        .
-keyn=YOUR_API_KEY_n
+cd src/
+python main.py
 ```
-
-It is recommended to have multiple keys, since searching for YouTube videos quickly use up the _____ credits?? \reference
-Once [*config.ini*](/blob/main/src/config.ini) has keys, you can collect trailers and comments with [*main.py*](/blob/main/src/main.py) from the root as 
->python main.py
 
 This will by default collect all YouTube videos listed with "trailer" from the official channels of Amazon, Disney, 
-HBO and Netflix, and output each file in *[data/raw/trailers/](/tree/main/data/raw/trailers)* and [*data/raw/comments/*](/tree/main/data/raw/comments)
+HBO and Netflix, and output each file in *[data/raw/trailers/](data/raw/trailers)* and *[data/raw/comments/](data/raw/comments)*.
+
+
+### Get Return YouTube Dislike data
+Mads hjælp skriv guidelines og how to do stuff...
+
+
 
 ### Download IMDb data
+IMDb data can be found at https://www.imdb.com/interfaces/; this project needs title.basics.tsv.gz and 
+title.ratings.tsv.gz to be located in *[/imdb](data/raw/imdb)*
+
+
+### Scrape IMDb release dates
+Release dates of IMDb entries are not available in any of its official data. As a workaround, we scrape it from their website.
+To do this, run *[scrape_release_dates.py](src/data/scrape_release_dates.py)*
+
+```
+cd src/data/
+python scrape_release_dates.py
+```
+
+This will output *[release_dates.csv](data/interim/release_dates.csv)* in *[interim](data/interim)*.
+
+Currently, there are two policies for scraping this date: getting the first US date or getting the most common date. 
+This policy can be picked for the former, and the latter in the class with respectively the methods *scrape_dates()* and *scrape_dates_alternate()*
+
+## Data annotation
+This step can be optionally skipped, but to recreate this exact project, it needs to be done. 
+We used the raw scraped comment data, loaded it into a label studio project and annotated sentiments. 
+For more information, see the *[paper](reports/paper.pdf)*.
+
+
+## Data wrangling and processing
+In this step of the pipeline, the following tasks need to be done:
+1. [Remove all non-trailers from the trailers data](#cleanup-trailer-data)
+2. [Match IMDb data with YouTube trailers](#match-imdb-and-youtube)
+3. [Merge all the data](#merge-all-data)
+
+### Cleanup trailer data
+This step can be done either using the notebook *[data_cleaning.ipynb](notebooks/reports/data_cleaning.ipynb)* or by 
+running the python script *[trailer_cleaning.py](src/data/trailer_cleaning.py)*
+```
+cd src/data/
+python trailer_cleaning.py
+```
+This creates cleaned trailer files located in *[interim](data/interim)*.
+
+### Match IMDb and YouTube
+This process is done manually. There are a number of reasons why we don't currently do it in an automated manner, 
+all of which are detailed in the *[report](reports/paper.pdf)*. 
+The matching should yield a *match.csv*, which follows
+```
+tconst,videoId
+tt123456,A1b2c3D4E5
+...,...
+```
+
+### Merge all data
+Before this step, the following files should be in their respective repositories
+
+```
+data
+│
+├───external
+│   └───imdb
+│       ├───title.basics.tsv        
+│       └───title.ratings.tsv       
+│       
+├───interim                   
+│   ├───annotated.csv     
+│   ├───release_dates.csv 
+│   │       
+│   ├───match                 
+│   │   ├───amazon_match.csv  
+│   │   ├───disney_match.csv  
+│   │   ├───hbo_match.csv     
+│   │   └───netflix_match.csv 
+│   │       
+│   └───trailers              
+│       ├───amazon.csv      
+│       ├───disney.csv      
+│       ├───hbo.csv     
+│       └───netflix.csv
+│
+└───raw                       
+    ├───returnyoutubedislikes.csv
+    │
+    └───comments               
+        ├───amazon_comments.csv
+        ├───disney_comments.csv     
+        ├───hbo_comments.csv        
+        └───netflix_comments.csv        
+```
+Once this is true, run either *[data_merging.ipynb](notebooks/reports/data_merging.ipynb)* or 
+*[data_merging.py](src/data/data_merging.py)* as
+```
+cd src/data/
+python data_merging.py
+```
+Running the above command should produce the final dataset. 
+
+## Data analysis
+There are many aspects of the data analysis in this project. All of the code used to produce the results of this study 
+can be found in *[notebooks/reports](notebooks/reports)*. Pay attention to:
+
+```
+notebooks
+└───reports
+    ├───EDA.ipynb
+    ├───ReturnYouTubeDislikesAnalysis.ipynb
+    ├───scatter_relation.ipynb             
+    ├───stat_test.ipynb                    
+    └───timeseries_analysis.ipynb
+```
+These exact notebooks are the ones used to produce all the results of this study. 
 
 
 # Project Overview
@@ -54,11 +185,11 @@ The following describes all files within this project, their purpose and their l
 │   │       └───title.ratings.tsv       
 │   │       
 │   ├───interim                                     <- Directory for all files that aren't raw or fully processed
-│   │   │   ├───annotated.csv                       <- All raw data annotations, outputted from Label-Studio
-│   │   │   ├───annotated_aggregate.csv             <- Aggregate of annotated.csv, aggregates all annotations per comment into one
-│   │   │   ├───match.csv                           <- File for joining IMDb data with YouTube trailer data, composite file of the files found in /match 
-│   │   │   ├───release_dates.csv                   <- Release dates scraped from IMDb with imdbscraper
-│   │   │   └───trailers.csv                        <- All collected trailers with non-trailers removed
+│   │   ├───annotated.csv                           <- All raw data annotations, outputted from Label-Studio
+│   │   ├───annotated_aggregate.csv                 <- Aggregate of annotated.csv, aggregates all annotations per comment into one
+│   │   ├───match.csv                               <- File for joining IMDb data with YouTube trailer data, composite file of the files found in /match 
+│   │   ├───release_dates.csv                       <- Release dates scraped from IMDb with imdbscraper
+│   │   ├───trailers.csv                            <- All collected trailers with non-trailers removed
 │   │   │       
 │   │   ├───match                                   <- Directory for all match.csv files needed for join IMDb and YouTube
 │   │   │   ├───amazon_match.csv        
@@ -133,14 +264,18 @@ The following describes all files within this project, their purpose and their l
     ├───visualizor.py                               <- Enforces styleguide used for visualizations
     ├───__init__.py
     │
+    ├───data                                        <- Directory for creating all data files
+    │   ├───data_merging.py                         <- For creating the final data.csv  
+    │   └───trailer_cleaning.py                     <- Removes all non-trailers from trailers data
+    │
     ├───imdb_api                                    <- Module for scraping IMDb release dates
-    │       imdbscraper.py                          <- Code for getting release dates from IMDb
+    │   └───imdbscraper.py                          <- Code for getting release dates from IMDb
     │
     └───youtube_api                                 <- Module for collecting trailers, comments with utilities
-            utilities.py                            <- Helper functions for the module
-            youtubecommentgetter.py                 <- Gets comments for each video
-            youtubegetter.py                        <- Parent class for YoutubeCommentGetter and YoutubeVideoGetter
-            youtubevideogetter.py                   <- Gets videos from YouTube
+        ├───utilities.py                            <- Helper functions for the module
+        ├───youtubecommentgetter.py                 <- Gets comments for each video
+        ├───youtubegetter.py                        <- Parent class for YoutubeCommentGetter and YoutubeVideoGetter
+        └───youtubevideogetter.py                   <- Gets videos from YouTube
 ```
 
 
