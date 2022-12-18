@@ -29,6 +29,8 @@ class ImdbScraper:
 
     def scrape_dates_alternate(self, tconsts, timeout=.1, verbose=False):
         for tconst in tconsts:
+            if verbose:
+                print(tconst)
             response = requests.get(f'https://www.imdb.com/title/{tconst}/releaseinfo')
             soup = BeautifulSoup(response.text)
             dates = re.findall('\d{1,2} [A-z]+ \d{4}', str(soup))
@@ -41,6 +43,9 @@ class ImdbScraper:
                     release_date = min(dates)
                 self.data['id'].append(tconst)
                 self.data['release_date_us'].append(release_date)
+
+                if verbose:
+                    print(release_date)
 
             sleep(timeout)
 
