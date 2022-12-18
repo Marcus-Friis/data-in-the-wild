@@ -14,7 +14,7 @@ overview, see [Project Overview](#project-overview)
 
 
 ## Data collection
-If you don't want to collect data yourself, see the [data folder](/tree/main/data)
+If you don't want to collect data yourself, see the [data folder](data)
 Data collection can be broken up into 2 parts:
 
 ### Scrape YouTube data
@@ -37,12 +37,12 @@ Once [*config.ini*](/blob/main/src/config.ini) has keys, you can collect trailer
 >python main.py
 
 This will by default collect all YouTube videos listed with "trailer" from the official channels of Amazon, Disney, 
-HBO and Netflix, and output each file in [*data/raw/trailers/*](/tree/main/data/raw/trailers) and [*data/raw/comments/*](/tree/main/data/raw/comments)
+HBO and Netflix, and output each file in *[data/raw/trailers/](/tree/main/data/raw/trailers)* and [*data/raw/comments/*](/tree/main/data/raw/comments)
 
 ### Download IMDb data
 
 
-#[Project Overview](#project-overview)
+# [Project Overview](#project-overview)
 The following describes all files within this project, their purpose and their location.
 ```
 │
