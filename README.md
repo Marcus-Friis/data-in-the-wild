@@ -42,7 +42,7 @@ HBO and Netflix, and output each file in *[data/raw/trailers/](/tree/main/data/r
 ### Download IMDb data
 
 
-# [Project Overview](#project-overview)
+# Project Overview
 The following describes all files within this project, their purpose and their location.
 ```
 │
