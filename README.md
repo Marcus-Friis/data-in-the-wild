@@ -259,6 +259,7 @@ The following describes all files within this project, their purpose and their l
 │       ├───ReturnYouTubeDislikesAnalysis.ipynb     <- Notebook for exploring Return YouTube Dislike data
 │       ├───return_youtube_dislikes.ipynb           <- Notebook for collecting Return YouTube Dislike data
 │       ├───scatter_relation.ipynb                  <- Notebook for creating one of the main plots
+│       ├───sentiment_analysis.ipynb                <- Notebook for calculating performance of Vader
 │       ├───stat_test.ipynb                         <- Notebook for testing the statistical significance of sentiment prerelease
 │       └───timeseries_analysis.ipynb               <- Notebook for creatin main timeseries plot
 │
