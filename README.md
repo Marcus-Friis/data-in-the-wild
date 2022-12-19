@@ -50,7 +50,7 @@ API key, which should be stored in the [*config.ini*](src/config.ini) file as su
 >keyn=YOUR_API_KEY_n
 
 
-It is recommended to have multiple keys, since [YouTube's search method](LINK) quickly use up the _____ credits?? \reference
+It is recommended to have multiple keys, since [YouTube's search method](https://developers.google.com/youtube/v3/docs/search/list) quickly use up the api units (see more *[here](https://developers.google.com/youtube/v3/getting-started#quota)*). 
 Once *[config.ini](src/config.ini)* has keys, you can collect trailers and comments with *[main.py](src/main.py)* as such
 
 ```
