@@ -67,7 +67,11 @@ Dislikes are not an available metric to scrape with the YouTube api. Instead, we
 
 The script gets alle the videoIds from trailers.csv file, and iteratively call the API and creates a dataframe.
 
-To run this, run *[return_youtube_dislikes.py](src/data/return_youtube_dislikes.py)* 
+To run this, run
+```
+cd src/data/
+python return_youtube_dislikes.py
+```
 
 This will output *[returnyoutubedislikes.csv](data/raw/returnyoutubedislikes.csv)* in *[raw](data/raw)*
 
