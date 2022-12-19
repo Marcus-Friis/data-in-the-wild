@@ -1,10 +1,12 @@
 # data-in-the-wild
 
-<img src="reports/figs/sentiment_rating_scatter.svg" width="48">
+<img src="reports/figs/sentiment_rating_scatter.svg" width="800">
 
 
 ### Team Members: 
 Andreas Belsager (abel@itu.dk), Mads Høgenhaug (mkrh@itu.dk), Marcus Friis (mahf@itu.dk) & Mia Pugholm (mipu@itu.dk)
+
+---
 
 # Overview
 This project is split up into 3 main parts:
@@ -14,10 +16,11 @@ This project is split up into 3 main parts:
 4. [Data analysis](#data-analysis)
 
 This readme documents which files are responsible for what parts, and how to replicate our results. For a full project 
-overview, see [Project Overview](#project-overview)
+overview, see [Repository Overview](#repository-overview). 
 
+---
 
-## Data collection
+# Data collection
 If you don't want to collect data yourself, see the *[data folder](data)*
 Data collection can be broken up into 2 separate processes:
 
@@ -31,7 +34,7 @@ and
 
 
 
-### Get YouTube data
+## Get YouTube data
 There are 2 different kinds of data that needs to be scraped from YouTube: trailer video data and comments.
 These can both be collected with the [*youtube_api*](src/youtube_api) module. To start off, you first need one or more YouTube 
 API key, which should be stored in the [*config.ini*](src/config.ini) file as such:
@@ -58,17 +61,17 @@ This will by default collect all YouTube videos listed with "trailer" from the o
 HBO and Netflix, and output each file in *[data/raw/trailers/](data/raw/trailers)* and *[data/raw/comments/](data/raw/comments)*.
 
 
-### Get Return YouTube Dislike data
+## Get Return YouTube Dislike data
 Mads hjælp skriv guidelines og how to do stuff...
 
 
 
-### Download IMDb data
+## Download IMDb data
 IMDb data can be found at https://www.imdb.com/interfaces/; this project needs title.basics.tsv.gz and 
 title.ratings.tsv.gz to be located in *[/imdb](data/raw/imdb)*
 
 
-### Scrape IMDb release dates
+## Scrape IMDb release dates
 Release dates of IMDb entries are not available in any of its official data. As a workaround, we scrape it from their website.
 To do this, run *[scrape_release_dates.py](src/data/scrape_release_dates.py)*
 
@@ -82,19 +85,22 @@ This will output *[release_dates.csv](data/interim/release_dates.csv)* in *[inte
 Currently, there are two policies for scraping this date: getting the first US date or getting the most common date. 
 This policy can be picked for the former, and the latter in the class with respectively the methods *scrape_dates()* and *scrape_dates_alternate()*
 
-## Data annotation
+---
+
+# Data annotation
 This step can be optionally skipped, but to recreate this exact project, it needs to be done. 
 We used the raw scraped comment data, loaded it into a label studio project and annotated sentiments. 
 For more information, see the *[paper](reports/paper.pdf)*.
 
+---
 
-## Data wrangling and processing
+# Data wrangling and processing
 In this step of the pipeline, the following tasks need to be done:
 1. [Remove all non-trailers from the trailers data](#cleanup-trailer-data)
 2. [Match IMDb data with YouTube trailers](#match-imdb-and-youtube)
 3. [Merge all the data](#merge-all-data)
 
-### Cleanup trailer data
+## Cleanup trailer data
 This step can be done either using the notebook *[data_cleaning.ipynb](notebooks/reports/data_cleaning.ipynb)* or by 
 running the python script *[trailer_cleaning.py](src/data/trailer_cleaning.py)*
 ```
@@ -103,7 +109,7 @@ python trailer_cleaning.py
 ```
 This creates cleaned trailer files located in *[interim](data/interim)*.
 
-### Match IMDb and YouTube
+## Match IMDb and YouTube
 This process is done manually. There are a number of reasons why we don't currently do it in an automated manner, 
 all of which are detailed in the *[report](reports/paper.pdf)*. 
 The matching should yield a *match.csv*, which follows
@@ -113,7 +119,7 @@ tt123456,A1b2c3D4E5
 ...,...
 ```
 
-### Merge all data
+## Merge all data
 Before this step, the following files should be in their respective repositories
 
 ```
@@ -157,7 +163,9 @@ python data_merging.py
 ```
 Running the above command should produce the final dataset. 
 
-## Data analysis
+---
+
+# Data analysis
 There are many aspects of the data analysis in this project. All of the code used to produce the results of this study 
 can be found in *[notebooks/reports](notebooks/reports)*. Pay attention to:
 
@@ -173,7 +181,7 @@ notebooks
 These exact notebooks are the ones used to produce all the results of this study. 
 
 
-# Project Overview
+# Repository Overview
 The following describes all files within this project, their purpose and their location.
 ```
 │
@@ -266,6 +274,7 @@ The following describes all files within this project, their purpose and their l
     │
     ├───data                                        <- Directory for creating all data files
     │   ├───data_merging.py                         <- For creating the final data.csv  
+    │   ├───scrape_release_dates.py                 <- Scrapes release dates from tconsts 
     │   └───trailer_cleaning.py                     <- Removes all non-trailers from trailers data
     │
     ├───imdb_api                                    <- Module for scraping IMDb release dates
