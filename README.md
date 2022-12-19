@@ -8,10 +8,10 @@ Andreas Belsager (abel@itu.dk), Mads Høgenhaug (mkrh@itu.dk), Marcus Friis (mah
 
 ---
 
-# Overview
-This project is split up into 3 main parts:
+# Get started
+This project is split up into 4 main parts:
 1. [Data collection](#data-collection)
-2. [Data annotation](#data-annotation)
+2. [Data annotation](#data-annotation) (Optional depending on goal)
 3. [Data wrangling and processing](#data-wrangling-and-processing)
 4. [Data analysis](#data-analysis)
 
@@ -21,7 +21,8 @@ overview, see [Repository Overview](#repository-overview).
 ---
 
 # Data collection
-If you don't want to collect data yourself, see the *[data folder](data)*.
+To use our data, see the existin data in *[data](data)*.
+
 Data collection can be broken up into 2 separate processes:
 
 1. [Get YouTube data](#get-youtube-data)
@@ -67,12 +68,14 @@ Mads hjælp skriv guidelines og how to do stuff...
 
 
 ## Download IMDb data
-IMDb data can be found at https://www.imdb.com/interfaces/; this project needs title.basics.tsv.gz and 
+IMDb does not have a free API for accessing their data. Instead, IMDb data can be downloaded at https://www.imdb.com/interfaces/. For this project, you will need title.basics.tsv.gz and 
 title.ratings.tsv.gz to be located in *[/imdb](data/raw/imdb)*
 
 
 ## Scrape IMDb release dates
-Release dates of IMDb entries are not available in any of its official data. As a workaround, we scrape it from their website.
+Release dates of IMDb entries are not available in any of its official data. However, it is listed on their website. 
+As a workaround, we scrape it from their website.
+
 To do this, run *[scrape_release_dates.py](src/data/scrape_release_dates.py)*
 
 ```
@@ -95,6 +98,8 @@ For more information, see the *[paper](reports/paper.pdf)*.
 ---
 
 # Data wrangling and processing
+Once all the data has been collected, it is ready to be wrangled and processed. 
+
 In this step of the pipeline, the following tasks need to be done:
 1. [Remove all non-trailers from the trailers data](#cleanup-trailer-data)
 2. [Match IMDb data with YouTube trailers](#match-imdb-and-youtube)
@@ -112,6 +117,7 @@ This creates cleaned trailer files located in *[interim](data/interim)*.
 ## Match IMDb and YouTube
 This process is done manually. There are a number of reasons why we don't currently do it in an automated manner, 
 all of which are detailed in the *[report](reports/paper.pdf)*. 
+
 The matching should yield a *match.csv*, which follows
 ```
 tconst,videoId
