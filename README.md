@@ -63,7 +63,13 @@ HBO and Netflix, and output each file in *[data/raw/trailers/](data/raw/trailers
 
 
 ## Get Return YouTube Dislike data
-Mads hjælp skriv guidelines og how to do stuff...
+Dislikes are not an available metric to scrape with the YouTube api. Instead, we can make use of the  'Return YouTube Dislike' API, that estimates the number of dislikes. This API also gives us the like count and view count of the various videos. 
+
+The script gets alle the videoIds from trailers.csv file, and iteratively call the API and creates a dataframe.
+
+To run this, run *[return_youtube_dislikes.py](src/data/return_youtube_dislikes.py)* 
+
+This will output *[returnyoutubedislikes.csv](data/raw/returnyoutubedislikes.csv)* in *raw[data/raw]
 
 
 
