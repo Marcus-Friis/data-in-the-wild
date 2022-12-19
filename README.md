@@ -15,13 +15,13 @@ This project is split up into 3 main parts:
 3. [Data wrangling and processing](#data-wrangling-and-processing)
 4. [Data analysis](#data-analysis)
 
-This readme documents which files are responsible for what parts, and how to replicate our results. For a full project 
+This README documents which files are responsible for what parts, and how to replicate our results. For a full project 
 overview, see [Repository Overview](#repository-overview). 
 
 ---
 
 # Data collection
-If you don't want to collect data yourself, see the *[data folder](data)*
+If you don't want to collect data yourself, see the *[data folder](data)*.
 Data collection can be broken up into 2 separate processes:
 
 1. [Get YouTube data](#get-youtube-data)
