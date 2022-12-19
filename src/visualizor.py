@@ -6,11 +6,13 @@ from matplotlib.gridspec import GridSpec
 from matplotlib import cycler
 
 
+# define custom plot style based on ggplot
 style = plt.style.library['ggplot']
 style['axes.facecolor'] = '#eaeaea'
 style['legend.frameon'] = False
 style['axes.prop_cycle'] = cycler('color', ['#348ABD', '#E24A33', '#8EBA42', '#988ED5', '#777777', '#FBC15E', '#FFB5B8'])
 plt.style.use(style)
+# above code is executed whenever this script is imported, thus applying the style
 
 
 def ratings_heatmap(ratings):
