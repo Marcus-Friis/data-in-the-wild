@@ -69,7 +69,7 @@ The script gets alle the videoIds from trailers.csv file, and iteratively call t
 
 To run this, run *[return_youtube_dislikes.py](src/data/return_youtube_dislikes.py)* 
 
-This will output *[returnyoutubedislikes.csv](data/raw/returnyoutubedislikes.csv)* in *raw[data/raw]*
+This will output *[returnyoutubedislikes.csv](data/raw/returnyoutubedislikes.csv)* in *[raw](data/raw)*
 
 
 
