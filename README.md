@@ -268,10 +268,7 @@ The following describes all files within this project, their purpose and their l
 │       └───timeseries_analysis.ipynb               <- Notebook for creatin main timeseries plot
 │
 ├───reports                                         <- Directory for all things used for the paper
-│   │   ├───annotation_guide.tex                    <- Annotation guide describing the guidelines for the annotation process
-│   │   ├───main.tex                                <- Main LaTeX file for the paper
-│   │   ├───paper.pdf                               <- Finalized paper in PDF format
-│   │   └───references.bib                          <- References of the paper
+│   │   └───paper.pdf                               <- Finalized paper in PDF format
 │   │
 │   └───figs                                        <- Directory for figures of the repo and paper
 │       ├───aamatrix.svg                            <- Annotator agreement matrix
